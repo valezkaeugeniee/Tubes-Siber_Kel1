@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.db'
@@ -17,7 +18,8 @@ class Student(db.Model):
 
 @app.route('/')
 def index():
-    students = Student.query.all()
+    # RAW Query
+    students = db.session.execute(text('SELECT * FROM student')).fetchall()
     return render_template('index.html', students=students)
 
 @app.route('/add', methods=['POST'])
@@ -25,28 +27,39 @@ def add_student():
     name = request.form['name']
     age = request.form['age']
     grade = request.form['grade']
-    new_student = Student(name=name, age=age, grade=grade)
-    db.session.add(new_student)
+    
+    # RAW Query
+    db.session.execute(
+        text("INSERT INTO student (name, age, grade) VALUES (:name, :age, :grade)"),
+        {'name': name, 'age': age, 'grade': grade}
+    )
     db.session.commit()
     return redirect(url_for('index'))
 
-@app.route('/delete/<int:id>')
+
+@app.route('/delete/<string:id>') 
 def delete_student(id):
-    student = Student.query.get_or_404(id)
-    db.session.delete(student)
+    # RAW Query
+    db.session.execute(text(f"DELETE FROM student WHERE id={id}"))
     db.session.commit()
     return redirect(url_for('index'))
+
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_student(id):
-    student = Student.query.get_or_404(id)
     if request.method == 'POST':
-        student.name = request.form['name']
-        student.age = request.form['age']
-        student.grade = request.form['grade']
+        name = request.form['name']
+        age = request.form['age']
+        grade = request.form['grade']
+        
+        # RAW Query
+        db.session.execute(text(f"UPDATE student SET name='{name}', age={age}, grade='{grade}' WHERE id={id}"))
         db.session.commit()
         return redirect(url_for('index'))
-    return render_template('edit.html', student=student)
+    else:
+        # RAW Query
+        student = db.session.execute(text(f"SELECT * FROM student WHERE id={id}")).fetchone()
+        return render_template('edit.html', student=student)
 
 if __name__ == '__main__':
     with app.app_context():
