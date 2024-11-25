@@ -39,14 +39,14 @@ def add_student():
     # #     {'name': name, 'age': age, 'grade': grade}
     # # )
     # # db.session.commit()
-    # query = f"INSERT INTO student (name, age, grade) VALUES ('{name}', {age}, '{grade}')"
-    # cursor.execute(query)
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    tables = cursor.fetchall()
+    query = f"INSERT INTO student (name, age, grade) VALUES ('{name}', {age}, '{grade}')"
+    cursor.execute(query)
+    # cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    # tables = cursor.fetchall()
     connection.commit()
     connection.close()
-    print("Daftar tabel:", tables)
-    # return redirect(url_for('index'))
+    # print("Daftar tabel:", tables)
+    return redirect(url_for('index'))
 
 
 @app.route('/delete/<string:id>') 
