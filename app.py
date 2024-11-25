@@ -30,8 +30,8 @@ def add_student():
     grade = request.form['grade']
     
 
-    # connection = sqlite3.connect('students.db')
-    # cursor = connection.cursor()
+    connection = sqlite3.connect('students.db')
+    cursor = connection.cursor()
 
     # # RAW Query
     # # db.session.execute(
@@ -41,9 +41,12 @@ def add_student():
     # # db.session.commit()
     # query = f"INSERT INTO student (name, age, grade) VALUES ('{name}', {age}, '{grade}')"
     # cursor.execute(query)
-    # connection.commit()
-    # connection.close()
-    return redirect(url_for('index'))
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = cursor.fetchall()
+    connection.commit()
+    connection.close()
+    print("Daftar tabel:", tables)
+    # return redirect(url_for('index'))
 
 
 @app.route('/delete/<string:id>') 
