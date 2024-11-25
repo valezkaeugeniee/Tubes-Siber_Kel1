@@ -30,20 +30,29 @@ def add_student():
     grade = request.form['grade']
     
 
+    # connection = sqlite3.connect('students.db')
+    # cursor = connection.cursor()
+
+    # # RAW Query
+    # # db.session.execute(
+    # #     text("INSERT INTO student (name, age, grade) VALUES (:name, :age, :grade)"),
+    # #     {'name': name, 'age': age, 'grade': grade}
+    # # )
+    # # db.session.commit()
+    # query = f"INSERT INTO student (name, age, grade) VALUES ('{name}', {age}, '{grade}')"
+    # cursor.execute(query)
+    # connection.commit()
+    # connection.close()
+    # return redirect(url_for('index'))
     connection = sqlite3.connect('students.db')
     cursor = connection.cursor()
 
-    # RAW Query
-    # db.session.execute(
-    #     text("INSERT INTO student (name, age, grade) VALUES (:name, :age, :grade)"),
-    #     {'name': name, 'age': age, 'grade': grade}
-    # )
-    # db.session.commit()
-    query = f"INSERT INTO student (name, age, grade) VALUES ('{name}', {age}, '{grade}')"
-    cursor.execute(query)
-    connection.commit()
+    # Cek apakah tabel 'student' ada
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = cursor.fetchall()
+    print("Daftar tabel:", tables)
+
     connection.close()
-    return redirect(url_for('index'))
 
 
 @app.route('/delete/<string:id>') 
