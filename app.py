@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
+import sqlite3
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.db'
@@ -28,12 +29,20 @@ def add_student():
     age = request.form['age']
     grade = request.form['grade']
     
+
+    connection = sqlite3.connect('students.db')
+    cursor = connection.cursor()
+
     # RAW Query
-    db.session.execute(
-        text("INSERT INTO student (name, age, grade) VALUES (:name, :age, :grade)"),
-        {'name': name, 'age': age, 'grade': grade}
-    )
-    db.session.commit()
+    # db.session.execute(
+    #     text("INSERT INTO student (name, age, grade) VALUES (:name, :age, :grade)"),
+    #     {'name': name, 'age': age, 'grade': grade}
+    # )
+    # db.session.commit()
+    query = f"INSERT INTO student (name, age, grade) VALUES ('{name}', {age}, '{grade}')"
+    cursor.execute(query)
+    connection.commit()
+    connection.close()
     return redirect(url_for('index'))
 
 
