@@ -24,11 +24,11 @@ def index():
     return render_template('index.html', students=students)
 
 # @app.route('/add', methods=['POST'])
-@app.route('/add/') 
+@app.route('/add/<string:id>') 
 def add_student():
-    name = request.form['name']
-    age = request.form['age']
-    grade = request.form['grade']
+    # name = request.form['name']
+    # age = request.form['age']
+    # grade = request.form['grade']
     
 
     connection = sqlite3.connect('students.db')
