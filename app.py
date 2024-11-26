@@ -23,8 +23,8 @@ def index():
     students = db.session.execute(text('SELECT * FROM student')).fetchall()
     return render_template('index.html', students=students)
 
-# @app.route('/add', methods=['POST'])
-@app.route('/add/<string:id>') 
+# @app.route('/add/<string:id>') 
+@app.route('/add', methods=['POST'])
 def add_student():
     # name = request.form['name']
     # age = request.form['age']
