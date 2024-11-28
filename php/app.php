@@ -29,10 +29,14 @@ function editStudent($pdo, $id, $name, $age, $grade) {
 }
 
 // Menangani route utama ('/')
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_SERVER['REQUEST_URI'] === '/') {
-    $students = getStudents($pdo);
-    // Menampilkan daftar siswa di halaman index.php
-    include 'index.php';
+// if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_SERVER['REQUEST_URI'] === '/') {
+//     $students = getStudents($pdo);
+//     // Menampilkan daftar siswa di halaman index.php
+//     include 'index.php';
+// }
+function index($pdo) {
+    $students = getAllStudents($pdo); // Memanggil fungsi untuk mengambil data siswa
+    include 'index.php'; // Menampilkan halaman index.php dengan daftar siswa
 }
 
 // Menangani route '/add' untuk menambah siswa
