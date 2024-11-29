@@ -9,10 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $grade = $_POST['grade'];
 
     // Memanggil fungsi untuk menambah data siswa
-    $pdo = connectDB();
-    if ($pdo) {
-        addStudent($pdo, $name, $age, $grade); // Fungsi addStudent ada di bawah
-    }
+    addStudent($name, $age, $grade); // Fungsi addStudent ada di app.php
 }
 
 ?>

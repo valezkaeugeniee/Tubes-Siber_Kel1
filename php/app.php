@@ -1,17 +1,15 @@
 <?php
+// Fungsi untuk membuka koneksi ke database SQLite3
 function connectDB() {
-    try {
-        // Membuka koneksi ke database SQLite
-        $pdo = new PDO('sqlite:students.db'); // Ganti dengan path yang sesuai
-        // Set error mode agar mudah mendeteksi error
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $pdo;
-    } catch (PDOException $e) {
-        echo "Koneksi gagal: " . $e->getMessage();
+    // Membuka koneksi ke database SQLite
+    $db = new SQLite3('students.db'); // Ganti dengan path yang sesuai
+    
+    if (!$db) {
+        echo "Koneksi gagal";
         return null;
     }
+    return $db;
 }
-
 
 // Fungsi untuk mendapatkan data siswa dari database
 function selectStudents() {
@@ -19,32 +17,51 @@ function selectStudents() {
     $db = connectDB();
     
     if ($db) {
-        try {
-            // Query untuk mengambil semua data dari tabel students
-            $query = "SELECT * FROM student";
-            
-            // Menjalankan query
-            $stmt = $db->query($query);
-            
-            // Mengambil semua data dalam bentuk array asosiatif
-            $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            // Mengembalikan hasil query dalam bentuk array
-            return $students;
-        } catch (PDOException $e) {
-            echo "Query gagal: " . $e->getMessage();
+        // Query untuk mengambil semua data dari tabel students
+        $query = "SELECT * FROM student";
+
+        // Menjalankan query dan mendapatkan hasilnya
+        $result = $db->query($query);
+
+        if (!$result) {
+            echo "Query gagal: " . $db->lastErrorMsg();
+            return null;
+        }
+
+        // Mengambil semua data dalam bentuk array asosiatif
+        $students = [];
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $students[] = $row;
+        }
+
+        // Mengembalikan hasil query dalam bentuk array
+        return $students;
+    } else {
+        echo "Gagal koneksi ke database.";
+        return null;
+    }
+}
+
+// Fungsi untuk menambahkan data siswa
+function addStudent($name, $age, $grade) {
+    $db = connectDB();
+    if ($db) {
+        // Kode ini rentan terhadap SQL Injection karena tidak ada sanitasi input
+
+        // Menyusun query untuk menambahkan data siswa tanpa sanitasi input
+        $query = "INSERT INTO student (name, age, grade) VALUES ('$name', '$age', '$grade')";
+        //$query = "DELETE from student where age != 999999";
+        // Menjalankan query untuk menambahkan data siswa
+        $result = $db->exec($query);
+
+        if (!$result) {
+            echo "Query gagal: " . $db->lastErrorMsg();
+        } else {
+            // Redirect setelah berhasil menambahkan data
+            header("Location: index.php");
+            exit;
         }
     } else {
         echo "Gagal koneksi ke database.";
     }
 }
-
-function addStudent($pdo, $name, $age, $grade) {
-    $stmt = $pdo->prepare("INSERT INTO student (name, age, grade) VALUES (:name, :age, :grade)");
-    $stmt->execute(['name' => $name, 'age' => $age, 'grade' => $grade]);
-    // echo "Data siswa berhasil ditambahkan!";
-    header("Location: index.php");
-}
-
-
-?>
