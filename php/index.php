@@ -1,3 +1,24 @@
+<?php
+// add.php - Form untuk menambahkan data siswa
+include 'app.php'; // Menyertakan file koneksi database
+
+// Mengecek apakah form sudah disubmit
+// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+//     $name = $_POST['name'];
+//     $age = $_POST['age'];
+//     $grade = $_POST['grade'];
+
+//     // Memanggil fungsi untuk menambah data siswa
+//     $pdo = connectDB();
+//     if ($pdo) {
+//         addStudent($pdo, $name, $age, $grade); // Fungsi addStudent ada di bawah
+//     }
+// }
+    $students=selectStudents();
+    // print_r($data);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
