@@ -42,8 +42,8 @@ include 'app.php'; // Menyertakan file koneksi database
             <td><?= $student['age'] ?></td>
             <td><?= $student['grade'] ?></td>
             <td>
-                <a href="/edit/<?= $student['id'] ?>">Edit</a> |
-                <a href="/delete/<?= $student['id'] ?>">Hapus</a>
+                <a href="edit.php?id=<?= $student['id'] ?>">Edit</a> |
+                <a href="delete.php?id=<?= $student['id'] ?>">Hapus</a>
             </td>
         </tr>
         <?php endforeach; ?>
