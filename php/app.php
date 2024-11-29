@@ -17,7 +17,7 @@ function selectStudentsById($id) {
     
     if ($db) {
         // Query untuk mengambil semua data dari tabel students
-        $query = "SELECT * FROM student WHERE ".$id;
+        $query = "SELECT * FROM student WHERE =".$id;
 
         // Menjalankan query dan mendapatkan hasilnya
         $result = $db->query($query);
