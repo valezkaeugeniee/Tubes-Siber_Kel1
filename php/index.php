@@ -78,7 +78,7 @@
         </section>
 
         <footer>
-            <p>&copy; 2024 Manajemen Siswa</p>
+            <p>&copy; 2024 Manajemen Siswa - ALH</p>
         </footer>
     </div>
 
