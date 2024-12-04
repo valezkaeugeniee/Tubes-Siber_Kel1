@@ -29,6 +29,16 @@ def add_student():
     age = request.form['age']
     grade = request.form['grade']
     
+    try:
+        age = int(age)
+                
+        if age < 0:
+            return redirect (url_for('index'))
+                
+    except ValueError:
+            return redirect (url_for('index'))
+            
+
 
     connection = sqlite3.connect('instance/students.db')
     cursor = connection.cursor()
