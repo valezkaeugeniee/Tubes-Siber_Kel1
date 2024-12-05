@@ -37,11 +37,17 @@ def add_student():
                 
     except ValueError:
             return redirect (url_for('index'))
+
+
+    # Kode dari gambar
+    new_student = Student(name=name, age=age, grade=grade)
+    db.session.add(new_student)
+    db.session.commit()
             
 
 
-    connection = sqlite3.connect('instance/students.db')
-    cursor = connection.cursor()
+    # connection = sqlite3.connect('instance/students.db')
+    # cursor = connection.cursor()
 
     # RAW Query
     # db.session.execute(
@@ -49,19 +55,29 @@ def add_student():
     #     {'name': name, 'age': age, 'grade': grade}
     # )
     # db.session.commit()
-    query = f"INSERT INTO student (name, age, grade) VALUES ('{name}', {age}, '{grade}')"
-    cursor.execute(query)
-    connection.commit()
-    connection.close()
+
+    # query = f"INSERT INTO student (name, age, grade) VALUES ('{name}', {age}, '{grade}')"
+    # cursor.execute(query)
+    # connection.commit()
+    # connection.close()
     return redirect(url_for('index'))
 
 
-@app.route('/delete/<string:id>') 
+@app.route('/delete/<string:id>', methods=['POST']) 
+# def delete_student(id):
+#     # RAW Query
+#     db.session.execute(text(f"DELETE FROM student WHERE id={id}"))
+#     db.session.commit()
+#     return redirect(url_for('index'))
+
 def delete_student(id):
-    # RAW Query
-    db.session.execute(text(f"DELETE FROM student WHERE id={id}"))
+    student = Student.query.get(id)  # Cari data berdasarkan ID
+    if not student:
+        return "Student not found", 404  # Jika ID tidak ada, kembalikan error
+
+    db.session.delete(student)  # Hapus data
     db.session.commit()
-    return redirect(url_for('index'))
+    return redirect('/')
 
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])

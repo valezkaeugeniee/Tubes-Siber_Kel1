@@ -34,9 +34,12 @@
             <td>{{ student.grade }}</td>
             <td>
               <a href="/edit/{{ student.id }}" class="btn btn-warning">Edit</a>
-              <a href="/delete/{{ student.id }}" class="btn btn-danger"
+              <!-- <a href="/delete/{{ student.id }}" class="btn btn-danger"
                 >Delete</a
-              >
+              > -->
+              <form action="/delete/{{ student.id }}" method="POST">
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
             </td>
           </tr>
           {% endfor %}
