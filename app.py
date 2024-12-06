@@ -50,16 +50,12 @@ def add_student():
     # cursor = connection.cursor()
 
     # RAW Query
-    # db.session.execute(
-    #     text("INSERT INTO student (name, age, grade) VALUES (:name, :age, :grade)"),
-    #     {'name': name, 'age': age, 'grade': grade}
-    # )
-    # db.session.commit()
-
-    # query = f"INSERT INTO student (name, age, grade) VALUES ('{name}', {age}, '{grade}')"
-    # cursor.execute(query)
-    # connection.commit()
-    # connection.close()
+    db.session.execute(
+         text("INSERT INTO student (name, age, grade) VALUES (:name, :age, :grade)"),
+         {'name': name, 'age': age, 'grade': grade}
+     )
+    db.session.commit()
+    db.session.close()
     return redirect(url_for('index'))
 
 
